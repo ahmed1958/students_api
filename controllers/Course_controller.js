@@ -30,7 +30,7 @@ const addCourse = (req, res) => {
     return;
   }
   const course = {
-    id: Courses.length + 1,
+    id: Courses[Courses.length - 1].id + 1,
     name: req.body.name,
   };
   Courses.push(course);
