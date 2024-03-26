@@ -1,9 +1,14 @@
 const joi =require('joi');
-const {Courses} =require('../models/courses');
-
+const Courses =require('../models/courses');
+function validate_Course (course)
+{
+    const schema = joi.object({name : joi.string().min(3).required()}); 
+    return schema.validate(course);
+}
 ////////////////////////////////////
-const getAllCourses =(req,res)=> {
-  res.send(Courses);
+const getAllCourses = (req,res) => {
+  console.log('here');
+  res.send(Courses);  
 };
 
 ////////////////////////////////////////////
@@ -20,7 +25,8 @@ const getCoursesById =(req,res)=> {
 };
 
 /////////////////////////////////////////////////////
-const addCourse = (req, res) => {
+const addCourse =(req, res)=> {
+console.log('here2');
 const result =validate_Course(req.body);
 if(result.error)
 {res.send(400).send(result.error.details[0].message);
@@ -49,11 +55,7 @@ return;
  course.name =req.body.name;
 };
 /////////////////////////////////////////////////////////////
-function validate_Course (course)
-{
-    const schema = joi.object({name : joi.string().min(3).required()}); 
-    return schema.validate(course);
-}
+
 
 //////////////////////////////////////////////////////
 const deleteCourse = (req, res) => {
