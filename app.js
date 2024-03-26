@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import { courseRouter } from "./routes/course_router.js";
+
 const app = express();
 app.use(express.json());
 
-const {courseRouter} = require("./routes/course_router")
-app.use('/api/courses/',courseRouter)
+app.use("/api/courses/", courseRouter);
 
-module.exports={app};
+export { app };
