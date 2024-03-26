@@ -38,6 +38,7 @@ const course = {
     name: req.body.name
 };
 Courses.push(course);
+res.send(Courses);
 };
 
 //////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ console.log(result);
 return;
 }
  course.name =req.body.name;
+ res.send(Courses);
 };
 /////////////////////////////////////////////////////////////
 
@@ -64,6 +66,7 @@ if (!course)
    res.status(404).send('the course with the given id not found');
 const index =Courses.indexOf(course);
 Courses.splice(index, 1)
+res.send(Courses);
 };
 
 module.exports={
