@@ -36,7 +36,7 @@ const addStudent = (req, res) => {
     return;
   }
   const student = {
-    id: Student.length + 1,
+    id: Student[Student.length - 1].id + 1,
     name: req.body.name,
     email: req.body.email,
   };
