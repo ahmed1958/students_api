@@ -2,7 +2,13 @@ import joi from "joi";
 import { Student } from "../models/student.js";
 
 function validate_Student(student) {
-  const schema = joi.object({ name: joi.string().min(3).required(), email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })});
+  const schema = joi.object({
+    name: joi.string().min(3).required(),
+    email: joi
+      .string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+  });
   return schema.validate(student);
 }
 
@@ -18,7 +24,7 @@ const geStudentById = (req, res) => {
   if (!student) {
     res.status(404).send("the student with the given id not found");
   } else {
-    res.send(Student);
+    res.send(student);
   }
 };
 
@@ -26,7 +32,7 @@ const geStudentById = (req, res) => {
 const addStudent = (req, res) => {
   const result = validate_Student(req.body);
   if (result.error) {
-    res.send(400).send(result.error.details[0].message);
+    res.sendStatus(400).json({ msg: result.error.details[0].message });
     return;
   }
   const student = {
@@ -48,10 +54,10 @@ const editStudentById = (req, res) => {
     res.sendStatus(400).send(result.error.details[0].message);
     return;
   }
-  if (req.body.name){
+  if (req.body.name) {
     student.name = req.body.name;
   }
-  if (req.body.email){
+  if (req.body.email) {
     student.email = req.body.email;
   }
   res.send(Student);
@@ -59,7 +65,7 @@ const editStudentById = (req, res) => {
 /////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////
-const deleteStudent= (req, res) => {
+const deleteStudent = (req, res) => {
   const student = Student.find((c) => c.id === parseInt(req.params.id));
   if (!student) res.status(404).send("the student with the given id not found");
   const index = Student.indexOf(student);
