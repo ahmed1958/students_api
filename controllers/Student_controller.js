@@ -14,6 +14,7 @@ function validate_Student(student) {
 
 ////////////////////////////////////
 const getAllStudent = (req, res) => {
+  
   res.send(Student);
 };
 
