@@ -1,70 +1,84 @@
 import joi from "joi";
-import { Courses } from "../models/courses.js";
+import { Course } from "../models/courses.js";
 
-function validate_Course(course) {
+function validateCourse(course) {
   const schema = joi.object({ name: joi.string().min(3).required() });
   return schema.validate(course);
 }
 
 ////////////////////////////////////
-const getAllCourses = (req, res) => {
-  res.send(Courses);
+const getAllCourses = async (req, res) => {
+  try {
+    const allCourses = await Course.find();
+    res.status(200).send(allCourses);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
 ////////////////////////////////////////////
 
-const getCoursesById = (req, res) => {
-  const course = Courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) {
-    res.status(404).send("the course with the given id not found");
-  } else {
-    res.send(course);
+const getCourseById = async (req, res) => {
+  try {
+    //findById
+    const allCourses = await Course.findOne({ _id: req.params.id })
+      .populate("students")
+      .populate("instructor_id");
+    if (allCourses) {
+      res.status(200).send(allCourses);
+    } else {
+      res.status(200).send("Course Not Found");
+    }
+  } catch (error) {
+    res.status(400).send(error);
   }
 };
 
 /////////////////////////////////////////////////////
-const addCourse = (req, res) => {
-  const result = validate_Course(req.body);
-  if (result.error) {
-    res.send(400).send(result.error.details[0].message);
-    return;
+const addCourse = async (req, res) => {
+  try {
+    const result = validateCourse(req.body);
+    if (result.error) {
+      res.sendStatus(400).json({ msg: result.error.details[0].message });
+      return;
+    }
+    const course = await Course.create(req.body);
+    res.status(201).send(course);
+  } catch (error) {
+    res.status(400).send(error);
   }
-  const course = {
-    id: Courses.length + 1,
-    name: req.body.name,
-  };
-  Courses.push(course);
-  res.send(Courses);
 };
 
 //////////////////////////////////////////////////////////////////
 
-const editCourseById = (req, res) => {
-  const course = Courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("the course with the given id not found");
-  const result = validate_Course(req.body);
-  if (result.error) {
-    res.sendStatus(400).send(result.error.details[0].message);
-    return;
+const editCourse = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    // const course = await Course.findByIdAndUpdate({ _id: userId }, req.body);
+    const course = await Course.findOne({ _id: userId });
+    if (!course) {
+      res.status(400).send("course not found");
+    }
+    if (req.body.name) {
+      course.name = req.body.name;
+    }
+    if (req.body.count) {
+      course.count = req.body.count;
+    }
+    await course.save();
+    res.status(200).send(course);
+  } catch (error) {
+    res.status(400).send(error);
   }
-  course.name = req.body.name;
-  res.send(Courses);
 };
 /////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////
-const deleteCourse = (req, res) => {
-  const course = Courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("the course with the given id not found");
-  const index = Courses.indexOf(course);
-  Courses.splice(index, 1);
-  res.send(Courses);
+const deleteCourse = async (req, res) => {
+  try {
+    const course = await Course.deleteOne({ _id: req.params.id });
+    res.status(200).send(course);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
-export {
-  addCourse,
-  deleteCourse,
-  editCourseById,
-  getAllCourses,
-  getCoursesById,
-};
+export { getAllCourses, getCourseById, addCourse, editCourse, deleteCourse };
