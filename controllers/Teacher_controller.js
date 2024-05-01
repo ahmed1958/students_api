@@ -85,7 +85,7 @@ const editTeacherById = async (req, res) => {
 const deleteTeacherById = async (req, res) => {
   const id = req.params.id;
   // update courses with instructor_id to null
-  await Course.findOneAndUpdate({ instructor_id: id }, { instructor_id: null });
+  await Course.updateMany({ instructor_id: id }, { instructor_id: null });
   const teacher = await Teacher.findOneAndDelete({ _id: id });
   if (!teacher) res.status(404).send("the teacher with the given id not found");
   res.send(teacher);
