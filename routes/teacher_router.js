@@ -8,5 +8,6 @@ teacherRouter.post("/", teacher_controller.addTeacher);
 teacherRouter.put("/:id", teacher_controller.editTeacherById);
 teacherRouter.delete("/:id", teacher_controller.deleteTeacherById);
 teacherRouter.put("/:id/enroll", teacher_controller.enrollTeacherIntoCourse);
+teacherRouter.put("/:id/decline", teacher_controller.declineCourse);
 
 export { teacherRouter };

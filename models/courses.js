@@ -16,7 +16,6 @@ const courseSchema = Schema({
   instructor_id: {
     type: Schema.Types.ObjectId,
     ref: TeacherSchemaName,
-    required: true,
   },
   students: [
     {
