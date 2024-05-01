@@ -1,7 +1,21 @@
-//u must create a file for each database(objects for now) and then in model.export put the object name
-export const Student = [
-    { id: 1, name: "Ahmed Ali",email:'ahmed@gmail.com' },
-    { id: 2, name: "Nagy" ,email:'nagy@gmail.com' },
-    { id: 3, name: "Mohamed Mamdouh" ,email:'mamdouh@gmail.com'},
-    { id: 4, name: "Seko" ,email:'seko@gmail.com'},
-  ];
+import mongoose from "mongoose";
+import { CourseSchemaName, StudentSchemaName } from "./helpers.js";
+
+const studentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  courses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: CourseSchemaName,
+    },
+  ],
+});
+
+export const Student = mongoose.model(StudentSchemaName, studentSchema);

@@ -1,6 +1,21 @@
-export const Teacher = [
-  { id: 1, name: "Seko", email: "seko@gmail.com" },
-  { id: 2, name: "Nagy", email: "nagy@gmail.com" },
-  { id: 3, name: "Ahmed Ali", email: "ahmed@gmail.com" },
-  { id: 4, name: "Mohamed Mamdouh", email: "mmdh@gmail.com" },
-];
+import mongoose from "mongoose";
+import { CourseSchemaName, TeacherSchemaName } from "./helpers.js";
+
+const teacherSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  courses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: CourseSchemaName,
+    },
+  ],
+});
+
+export const Teacher = mongoose.model(TeacherSchemaName, teacherSchema);
