@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { CourseSchemaName, StudentSchemaName } from "./helpers.js";
+import { CourseSchemaName, TeacherSchemaName } from "./helpers.js";
 
-const studentSchema = new mongoose.Schema({
+const teacherSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -18,4 +18,4 @@ const studentSchema = new mongoose.Schema({
   ],
 });
 
-export const Student = mongoose.model(StudentSchemaName, studentSchema);
+export const Teacher = mongoose.model(TeacherSchemaName, teacherSchema);
