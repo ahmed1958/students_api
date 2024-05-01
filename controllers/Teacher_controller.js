@@ -122,6 +122,35 @@ async function enrollTeacherIntoCourse(req, res) {
   return res.send(teacher);
 }
 
+async function declineCourse(req, res) {
+  /**
+   * teacher id
+   */
+  const id = req.params.id;
+  const result = validateEnrollmentReq(req.body);
+  if (result.error) {
+    return res.status(400).json({ msg: result.error.details });
+  }
+  try {
+    const { courseId } = req.body;
+    const [teacher, course] = await Promise.all([
+      Teacher.findById(id),
+      Course.findById(courseId),
+    ]);
+    if (!teacher) {
+      return res.status(404).send("the student with the given id not found");
+    }
+    if (!course) {
+      return res.status(404).send("the course with the given id not found");
+    }
+    teacher.courses.pull(course);
+    course.instructor_id = null;
+    await Promise.all([teacher.save(), course.save()]);
+    return res.send(teacher);
+  } catch (e) {
+    return res.status(400).send(e.message);
+  }
+}
 export {
   getAllTeacher,
   getTeacherById,
@@ -129,4 +158,5 @@ export {
   editTeacherById,
   deleteTeacherById,
   enrollTeacherIntoCourse,
+  declineCourse,
 };
