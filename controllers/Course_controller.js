@@ -21,13 +21,13 @@ const getAllCourses = async (req, res) => {
 const getCourseById = async (req, res) => {
   try {
     //findById
-    const allCourses = await Course.findOne({ _id: req.params.id })
+    const course = await Course.findOne({ _id: req.params.id })
       .populate("students")
       .populate("instructor_id");
-    if (allCourses) {
-      res.status(200).send(allCourses);
+    if (course) {
+      return res.status(200).send(course);
     } else {
-      res.status(200).send("Course Not Found");
+      return res.status(404).send("Course Not Found");
     }
   } catch (error) {
     res.status(400).send(error);
@@ -39,7 +39,7 @@ const addCourse = async (req, res) => {
   try {
     const result = validateCourse(req.body);
     if (result.error) {
-      res.sendStatus(400).json({ msg: result.error.details[0].message });
+      res.status(400).json({ msg: result.error.details });
       return;
     }
     const course = await Course.create(req.body);
@@ -74,7 +74,10 @@ const editCourse = async (req, res) => {
 /////////////////////////////////////////////////////////////
 const deleteCourse = async (req, res) => {
   try {
-    const course = await Course.deleteOne({ _id: req.params.id });
+    const course = await Course.findOneAndDelete({ _id: req.params.id });
+    if (!course) {
+      res.status(400).send("course not found");
+    }
     res.status(200).send(course);
   } catch (error) {
     res.status(400).send(error);
