@@ -1,5 +1,6 @@
 import joi from "joi";
 import { Course } from "../models/courses.js";
+import { Student } from "../models/student.js";
 
 function validateCourse(course) {
   const schema = joi.object({ name: joi.string().min(3).required() });
@@ -78,6 +79,11 @@ const deleteCourse = async (req, res) => {
     if (!course) {
       res.status(400).send("course not found");
     }
+    // remove course id from studnts
+    await Student.updateMany(
+      { courses: { $in: [req.params.id] } },
+      { $pull: { courses: req.params.id } },
+    );
     res.status(200).send(course);
   } catch (error) {
     res.status(400).send(error);
