@@ -5,15 +5,16 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon ./index.js",
-    "start": "node ./index.js"
+    "dev": "nodemon --env-file=.env ./index.js",
+    "start": "node --env-file=.env ./index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
-    "joi": "^17.12.2"
+    "joi": "^17.12.2",
+    "mongoose": "^8.3.3"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
