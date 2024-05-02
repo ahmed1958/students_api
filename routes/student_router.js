@@ -1,4 +1,4 @@
-ts
+
 import { Router } from "express";
 import * as student_controller from "../controllers/Student_controller.js";
 

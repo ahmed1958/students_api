@@ -1,4 +1,4 @@
-ts
+
 import joi from "joi";
 import { Student } from "../models/student.js";
 import { Course } from "../models/courses.js";
