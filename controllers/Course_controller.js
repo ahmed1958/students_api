@@ -63,9 +63,7 @@ const editCourse = async (req, res) => {
     if (req.body.name) {
       course.name = req.body.name;
     }
-    if (req.body.count) {
-      course.count = req.body.count;
-    }
+  
     await course.save();
     res.status(200).send(course);
   } catch (error) {
