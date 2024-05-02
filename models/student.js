@@ -9,6 +9,7 @@ const studentSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   courses: [
     {
@@ -18,4 +19,4 @@ const studentSchema = new mongoose.Schema({
   ],
 });
 
-export const Student = mongoose.model(StudentSchemaName, studentSchema);
+export const Student = mongoose.model(StudentSchemaName, studentSchema);
